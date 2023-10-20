@@ -32,7 +32,7 @@ class SqlDB {
         "id" INTEGER PRIMARY KEY NOT NULL ,
         "amount" REAL,
         "description" TEXT,
-        "isIncome" INTEGER
+        "isIncome" INTEGER,
         "date" TEXT
       )
     ''');

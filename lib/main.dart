@@ -19,7 +19,6 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // fill array data
   await YourDataHandler.getDataAndStoreInArray();
-  log(rowDataList[0].id);
   runApp(expenseTracker());
 }
 

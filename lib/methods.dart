@@ -10,10 +10,8 @@ import 'package:untitled1/main.dart';
 import 'package:untitled1/model.dart';
 
 Widget DrawPie(double height, int alpha, int width, bool backGround) {
-  int? income = RowData.getIncome();
-  income ?? 0;
-  int? expense = RowData.getExpense();
-  expense ?? 0;
+  int income = RowData.getIncome() ?? 1;
+  int expense = RowData.getExpense() ?? 1;
   return SizedBox(
       height: height,
       child: DChartPie(
@@ -50,10 +48,8 @@ Widget DrawPieChart() {
 }
 
 Widget DrawIncomeExpenseRec(bool IsIncome) {
-  int? income = RowData.getIncome();
-  income ?? 0;
-  int? expense = RowData.getExpense();
-  expense ?? 0;
+  int income = RowData.getIncome() ?? 0;
+  int expense = RowData.getExpense() ?? 0;
 
   return Container(
     height: 70,
