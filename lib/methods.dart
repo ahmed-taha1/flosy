@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled1/dataBase.dart';
@@ -180,7 +181,7 @@ Widget DrawRowData() {
 Widget DrawTextField(TextInputType textInputType, String LabelText,
     TextEditingController Controller) {
   return SizedBox(
-    height: 50,
+    height: 70,
     child: TextField(
       controller: Controller,
       decoration: InputDecoration(
@@ -200,9 +201,13 @@ Widget DrawTextField(TextInputType textInputType, String LabelText,
             width: 1.5,
           ),
         ),
+        counterStyle: const TextStyle(
+          color: Colors.white, // Replace with your desired color
+        ),
       ),
       style: const TextStyle(color: Colors.white),
       keyboardType: textInputType,
+      maxLength: LabelText == "amount" ? 10 : 30,
     ),
   );
 }

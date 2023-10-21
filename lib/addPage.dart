@@ -71,7 +71,7 @@ class _addPageState extends State<addPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 250, horizontal: 50),
+        padding: const EdgeInsets.symmetric(vertical: 230, horizontal: 50),
         child: Column(
           children: [
             const Text(
@@ -89,6 +89,7 @@ class _addPageState extends State<addPage> {
               height: 10,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                     child:

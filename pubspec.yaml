@@ -43,10 +43,16 @@ dependencies:
   fluttertoast: ^8.1.2
   awesome_snackbar_content: ^0.1.3
   easy_splash_screen: ^1.0.4
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  image_path: "logo/logo.png"
+  adaptive_icon_foreground: "logo/yarb.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
