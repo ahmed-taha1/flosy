@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/data.dart';
+import 'package:untitled1/DataBase/data.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/methods.dart';
-import 'package:untitled1/model.dart';
+import 'package:untitled1/View/methods.dart';
+import 'package:untitled1/Model/Expense.dart';
 
-import 'dataBase.dart';
+import '../DataBase/DataBaseHelper.dart';
 
 class addPage extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _addPageState extends State<addPage> {
   late TextEditingController Desctiption = TextEditingController(),
       amount = TextEditingController();
 
-  Widget DrawRadioBtn(bool isIncome) {
+  Widget drawRadioBtn(bool isIncome) {
     return SizedBox(
       height: 30,
       child: Row(
@@ -97,8 +97,8 @@ class _addPageState extends State<addPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DrawRadioBtn(true),
-                    DrawRadioBtn(false),
+                    drawRadioBtn(true),
+                    drawRadioBtn(false),
                   ],
                 ),
               ],
@@ -119,7 +119,7 @@ class _addPageState extends State<addPage> {
                         amount: double.parse(amount.text),
                         description: Desctiption.text,
                         id: 0);
-                    int id = await DataBase.insertData(data);
+                    int id = await DataBaseHelper.insert(data);
                     data.setId(id);
                     RowData.getData().insert(0, data);
 

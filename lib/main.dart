@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/addPage.dart';
-import 'package:untitled1/data.dart';
-import 'package:untitled1/home.dart';
+import 'package:untitled1/View/addPage.dart';
+import 'package:untitled1/DataBase/data.dart';
+import 'package:untitled1/View/home.dart';
 
 enum PageName {
   Home("/"),

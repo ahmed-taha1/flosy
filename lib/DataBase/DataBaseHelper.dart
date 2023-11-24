@@ -1,20 +1,17 @@
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:untitled1/model.dart';
 
-final SqlDB DataBase = SqlDB();
+import '../Model/Expense.dart';
 
-class SqlDB {
-  static Database? _db;
+class DataBaseHelper {
+  static Database? _instance;
 
-  Future<Database?> get db async {
-    _db ??= await initialDB();
-    return _db;
+  static Future<Database> getInstance() async {
+    _instance ??= await _initialDB();
+    return _instance!;
   }
 
-  initialDB() async {
+  static _initialDB() async {
     String dBPath = await getDatabasesPath();
     String path = join(dBPath, 'ExpenseApp.db');
     Database myDB = await openDatabase(path,
@@ -22,11 +19,11 @@ class SqlDB {
     return myDB;
   }
 
-  _onUpdate(Database db, int oldVersion, int newVersion) async {
+  static _onUpdate(Database db, int oldVersion, int newVersion) async {
 
   }
 
-  _onCreate(Database db, int version) async {
+  static _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE "RowData"(
         "id" INTEGER PRIMARY KEY NOT NULL ,
@@ -38,9 +35,9 @@ class SqlDB {
     ''');
   }
 
-  readData() async {
-    Database? myDB = await db;
-    List<Map> response = await myDB!.rawQuery('''
+  static read() async {
+    Database myDB = await getInstance();
+    List<Map> response = await myDB.rawQuery('''
       SELECT * FROM "RowData"
       ORDER BY id DESC;
     ''');
@@ -56,13 +53,13 @@ class SqlDB {
     return rowData;
   }
 
-  Future<int> insertData(RowData rowData) async {
-    Database? myDB = await db;
+  static Future<int> insert(RowData rowData) async {
+    Database myDB = await getInstance();
     try {
       if (rowData.amount < 0) {
         throw 0;
       }
-      var response = await myDB!.rawInsert('''
+      var response = await myDB.rawInsert('''
         INSERT INTO "RowData" (
           "amount", "description", "isIncome", "date")
         VALUES(
@@ -77,10 +74,10 @@ class SqlDB {
     }
   }
 
-  deleteRow(int id) async {
-    Database? myDB = await db;
+  static delete(int id) async {
+    Database myDB = await getInstance();
     try {
-      var response = await myDB!.rawDelete('''
+      var response = await myDB.rawDelete('''
         DELETE FROM "RowData" WHERE id = $id
       ''');
       return response;

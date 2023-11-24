@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/dataBase.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/model.dart';
+import 'package:untitled1/Model/Expense.dart';
+
+import '../DataBase/DataBaseHelper.dart';
 
 Widget DrawPie(double height, int alpha, int width, bool backGround) {
   int income = RowData.getIncome() ?? 1;
@@ -112,7 +113,7 @@ Widget DrawRowData() {
             children: [
               SlidableAction(
                 onPressed: (ctx) async {
-                  await DataBase.deleteRow(RowData.getData()[i].id);
+                  await DataBaseHelper.delete(RowData.getData()[i].id);
                   log(RowData.getData()[i].id);
                   RowData.getData().removeAt(i);
                   ctx.go(PageName.Home.path);

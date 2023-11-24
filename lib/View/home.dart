@@ -2,7 +2,7 @@ import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/methods.dart';
+import 'package:untitled1/View/methods.dart';
 
 class home extends StatelessWidget {
   final _controller = ScrollController();

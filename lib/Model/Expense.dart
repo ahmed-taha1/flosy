@@ -1,4 +1,4 @@
-import 'package:untitled1/data.dart';
+import 'package:untitled1/DataBase/data.dart';
 
 class RowData {
   bool isIncome;
