@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/View/addPage.dart';
-import 'package:untitled1/DataBase/data.dart';
-import 'package:untitled1/View/home.dart';
+import 'package:untitled1/Controller/ExpenseController.dart';
+import 'package:untitled1/View/AddExpenseView.dart';
+import 'package:untitled1/View/HomeView.dart';
 
 enum PageName {
   Home("/"),
@@ -15,17 +15,17 @@ enum PageName {
   const PageName(this.path);
 }
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // fill array data
-  await YourDataHandler.getDataAndStoreInArray();
-  runApp(expenseTracker());
+  await ExpenseController.fetchDataToBuffer();
+  runApp(ExpenseTracker());
 }
 
-class expenseTracker extends StatelessWidget {
-  GoRouter route = GoRouter(routes: [
-    GoRoute(path: PageName.Home.path, builder: (context, state) => home()),
-    GoRoute(path: PageName.AddPage.path, builder: (context, state) => addPage())
+class ExpenseTracker extends StatelessWidget {
+  final GoRouter route = GoRouter(routes: [
+    GoRoute(path: PageName.Home.path, builder: (context, state) => HomeView()),
+    GoRoute(path: PageName.AddPage.path, builder: (context, state) => AddExpenseView())
   ]);
 
   @override

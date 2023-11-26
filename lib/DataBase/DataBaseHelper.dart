@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:untitled1/Model/Date.dart';
 
 import '../Model/Expense.dart';
 
@@ -41,10 +42,10 @@ class DataBaseHelper {
       SELECT * FROM "RowData"
       ORDER BY id DESC;
     ''');
-    List<RowData> rowData = [];
+    List<Expense> rowData = [];
     for (var element in response) {
-      rowData.add(RowData(
-          date: element['date'] ?? Date.getDate(),
+      rowData.add(Expense(
+          date: element['date'] ?? new Date(),
           isIncome: element['isIncome'] == 1 ? true : false,
           amount: element['amount'],
           description: element['description'],
@@ -53,7 +54,7 @@ class DataBaseHelper {
     return rowData;
   }
 
-  static Future<int> insert(RowData rowData) async {
+  static Future<int> insert(Expense rowData) async {
     Database myDB = await getInstance();
     try {
       if (rowData.amount < 0) {

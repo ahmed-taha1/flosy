@@ -1,47 +1,25 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/DataBase/data.dart';
+import 'package:untitled1/Controller/ExpenseController.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/View/methods.dart';
-import 'package:untitled1/Model/Expense.dart';
+import 'package:untitled1/View/WidgetDrawer.dart';
 
-import '../DataBase/DataBaseHelper.dart';
+class AddExpenseView extends StatefulWidget {
+  static int EXPENSE_STATE = 0, INCOME_STATE = 1;
 
-class addPage extends StatefulWidget {
   @override
-  State<addPage> createState() => _addPageState();
+  State<AddExpenseView> createState() => _AddExpenseViewState();
 }
 
-class _addPageState extends State<addPage> {
-  int RadioState = 1;
-  late TextEditingController Desctiption = TextEditingController(),
-      amount = TextEditingController();
+class _AddExpenseViewState extends State<AddExpenseView> {
+  int radioBtnState = AddExpenseView.INCOME_STATE;
+  TextEditingController descriptionField = TextEditingController(),
+      amountField = TextEditingController();
 
-  Widget drawRadioBtn(bool isIncome) {
-    return SizedBox(
-      height: 30,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Radio(
-            value: isIncome ? 1 : 0,
-            groupValue: RadioState,
-            onChanged: (value) {
-              setState(() {
-                RadioState = isIncome ? 1 : 0;
-              });
-            },
-            fillColor: MaterialStateColor.resolveWith((states) => Colors.white),
-          ),
-          Text(
-            isIncome ? "Income" : "Expense",
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    );
+  void handleRadioBtnState(int state) {
+    setState(() {
+      radioBtnState = state;
+    });
   }
 
   @override
@@ -84,7 +62,8 @@ class _addPageState extends State<addPage> {
             const SizedBox(
               height: 50,
             ),
-            DrawTextField(TextInputType.text, 'Description', Desctiption),
+            WidgetDrawer.drawTextField(
+                TextInputType.text, 'description', descriptionField),
             const SizedBox(
               height: 10,
             ),
@@ -92,13 +71,15 @@ class _addPageState extends State<addPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child:
-                    DrawTextField(TextInputType.number, 'amount', amount)),
+                    child: WidgetDrawer.drawTextField(
+                        TextInputType.number, 'amount', amountField)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    drawRadioBtn(true),
-                    drawRadioBtn(false),
+                    WidgetDrawer.drawRadioBtn(AddExpenseView.INCOME_STATE,
+                        radioBtnState, handleRadioBtnState),
+                    WidgetDrawer.drawRadioBtn(AddExpenseView.EXPENSE_STATE,
+                        radioBtnState, handleRadioBtnState),
                   ],
                 ),
               ],
@@ -109,26 +90,20 @@ class _addPageState extends State<addPage> {
             Container(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
-                  //hide keyboard
-                  FocusScope.of(context).requestFocus(FocusNode());
-
+                onPressed: () {
+                  FocusScope.of(context)
+                      .requestFocus(FocusNode()); //hide keyboard
                   try {
-                    RowData data = RowData(
-                        isIncome: RadioState == 1 ? true : false,
-                        amount: double.parse(amount.text),
-                        description: Desctiption.text,
-                        id: 0);
-                    int id = await DataBaseHelper.insert(data);
-                    data.setId(id);
-                    RowData.getData().insert(0, data);
-
+                    ExpenseController.addExpense(
+                        radioBtnState == 1 ? true : false,
+                        amountField.text,
+                        double.parse(amountField.text));
                     // clear text fields
-                    amount.clear();
-                    Desctiption.clear();
-                    showSnackBar(context, true);
+                    amountField.clear();
+                    descriptionField.clear();
+                    WidgetDrawer.showSnackBar(context, true);
                   } catch (e) {
-                    showSnackBar(context, false);
+                    WidgetDrawer.showSnackBar(context, false);
                   }
                 },
                 style: ElevatedButton.styleFrom(

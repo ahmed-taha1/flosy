@@ -1,93 +1,36 @@
-import 'package:untitled1/DataBase/data.dart';
+import 'Date.dart';
 
-class RowData {
-  bool isIncome;
-  double amount;
-  String description;
-  int id;
-  String date;
+class Expense {
+  late bool _isIncome;
+  late double _amount;
+  late String _description;
+  late int _id;
+  late Date _date;
 
-  RowData(
-      {required this.isIncome,
-      required this.amount,
-      required this.description,
-      required this.id,
-      String? date}) : date = date ?? Date.getDate();
 
-  setId(int id) {
-    this.id = id;
+  Expense({required isIncome,
+    required amount,
+    required description,
+    id,
+    Date? date}) {
+    this._date = date ?? new Date();
+    this._id = id;  // TODO id my be null check what will happen
+    this._isIncome = isIncome;
+    this._amount = amount;
+    this._description = description;
   }
 
-  static getExpense() {
-    double expense = 0;
-    if (rowDataList.isEmpty) {
-      return null;
-    }
-    for (var e in rowDataList) {
-      if (!e.isIncome) {
-        expense += e.amount;
-      }
-    }
-    return expense.round();
+  set id(int value) {
+    _id = value;
   }
 
-  static getIncome() {
-    double income = 0;
-    double expense = 0;
-    if (rowDataList.isEmpty) {
-      return null;
-    }
-    for (var e in rowDataList) {
-      if (e.isIncome) {
-        income += e.amount;
-      } else {
-        expense += e.amount;
-      }
-    }
-    income -= expense;
-    return income.round() < 0 ? 0 : income.round();
-  }
+  bool get isIncome => _isIncome;
 
-  static List<RowData> getData() {
-    return rowDataList;
-  }
-}
+  double get amount => _amount;
 
-Map<int, String> dayConverter = {
-  1: "Mon",
-  2: "Tue",
-  3: "Wed",
-  4: "Thu",
-  5: "Fri",
-  6: "Sat",
-  7: "Sun",
-};
+  String get description => _description;
 
-Map<int, String> monthConverter = {
-  1: "Jan",
-  2: "Feb",
-  3: "Mar",
-  4: "Apr",
-  5: "May",
-  6: "June",
-  7: "July",
-  8: "Aug",
-  9: "Sept",
-  10: "Oct",
-  11: "Nov",
-  12: "Dec",
-};
+  Date get date => _date;
 
-class Date {
-  static String getDate() {
-    String s;
-    DateTime t = DateTime.now();
-    // day set
-    s = "${dayConverter[t.weekday]!}, ";
-    // day set
-    s += "${t.day} ";
-    // month and year set
-    s += "${monthConverter[t.month]} ${t.year}";
-    return s;
-  }
+  int get id => _id;
 }

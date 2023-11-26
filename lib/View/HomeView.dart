@@ -2,9 +2,9 @@ import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled1/main.dart';
-import 'package:untitled1/View/methods.dart';
+import 'package:untitled1/View/WidgetDrawer.dart';
 
-class home extends StatelessWidget {
+class HomeView extends StatelessWidget {
   final _controller = ScrollController();
 
   @override
@@ -27,7 +27,7 @@ class home extends StatelessWidget {
                   "Statement Details",
                   style: TextStyle(fontSize: 16),
                 ),
-                DrawPieChart(),
+                WidgetDrawer.drawPieCharts(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Column(
@@ -38,8 +38,8 @@ class home extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            DrawIncomeExpenseRec(true),
-                            DrawIncomeExpenseRec(false),
+                            WidgetDrawer.drawIncomeExpenseRec(true),
+                            WidgetDrawer.drawIncomeExpenseRec(false),
                           ],
                         ),
                       ),
@@ -54,7 +54,7 @@ class home extends StatelessWidget {
                             height: 1.5,
                             color: const Color.fromARGB(255, 238, 239, 245),
                           ),
-                          DrawRowData(),
+                          WidgetDrawer.drawExpenseList(),
                           const SizedBox(
                             height: 60,
                           ),
