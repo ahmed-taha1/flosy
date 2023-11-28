@@ -1,21 +1,26 @@
+import 'package:untitled1/Model/ExpenseType.dart';
+
 import 'Date.dart';
 
 class Expense {
-  late bool _isIncome;
+  late ExpenseType _type;
   late double _amount;
   late String _description;
   late int _id;
   late Date _date;
 
+  Expense(
+      {required type,
+      required amount,
+      required description,
+      id,
+      Date? date}) {
+    this._date = date ?? Date();
+    if (id != null) {
+      this._id = id;
+    }
 
-  Expense({required isIncome,
-    required amount,
-    required description,
-    id,
-    Date? date}) {
-    this._date = date ?? new Date();
-    this._id = id;  // TODO id my be null check what will happen
-    this._isIncome = isIncome;
+    this._type = type;
     this._amount = amount;
     this._description = description;
   }
@@ -24,7 +29,7 @@ class Expense {
     _id = value;
   }
 
-  bool get isIncome => _isIncome;
+  ExpenseType get type => _type;
 
   double get amount => _amount;
 

@@ -1,8 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:untitled1/Model/Date.dart';
 
-import '../Model/Expense.dart';
 
 class DataBaseHelper {
   static Database? _instance;
@@ -14,7 +12,7 @@ class DataBaseHelper {
 
   static _initialDB() async {
     String dBPath = await getDatabasesPath();
-    String path = join(dBPath, 'ExpenseApp.db');
+    String path = join(dBPath, 'Flosy.db');
     Database myDB = await openDatabase(path,
         onCreate: _onCreate, version: 1, onUpgrade: _onUpdate);
     return myDB;
@@ -25,62 +23,46 @@ class DataBaseHelper {
   }
 
   static _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE "RowData"(
-        "id" INTEGER PRIMARY KEY NOT NULL ,
+    try {
+      await db.execute('''
+      CREATE TABLE "Expense"(
+        "id" INTEGER PRIMARY KEY NOT NULL,
         "amount" REAL,
         "description" TEXT,
-        "isIncome" INTEGER,
+        "type" INTEGER,
         "date" TEXT
+      )''');
+      await db.execute('''
+      CREATE TABLE "Wish"(
+        "id" INTEGER PRIMARY KEY NOT NULL,
+        "name" TEXT
       )
     ''');
-  }
-
-  static read() async {
-    Database myDB = await getInstance();
-    List<Map> response = await myDB.rawQuery('''
-      SELECT * FROM "RowData"
-      ORDER BY id DESC;
-    ''');
-    List<Expense> rowData = [];
-    for (var element in response) {
-      rowData.add(Expense(
-          date: element['date'] ?? new Date(),
-          isIncome: element['isIncome'] == 1 ? true : false,
-          amount: element['amount'],
-          description: element['description'],
-          id: element['id']));
+    } catch(e){
+      rethrow;
     }
-    return rowData;
   }
 
-  static Future<int> insert(Expense rowData) async {
+  static read(String query) async {
+    Database myDB = await getInstance();
+    List<Map> response = await myDB.rawQuery(query);
+    return response;
+  }
+
+  static Future<int> insert(String query) async {
     Database myDB = await getInstance();
     try {
-      if (rowData.amount < 0) {
-        throw 0;
-      }
-      var response = await myDB.rawInsert('''
-        INSERT INTO "RowData" (
-          "amount", "description", "isIncome", "date")
-        VALUES(
-          ${rowData.amount},
-          "${rowData.description}",
-          ${rowData.isIncome == true ? 1 : 0},
-          "${rowData.date}")
-      ''');
+      var response = await myDB.rawInsert(query);
       return response;
     } catch (e) {
       rethrow;
     }
   }
 
-  static delete(int id) async {
+  static delete(String query) async {
     Database myDB = await getInstance();
     try {
-      var response = await myDB.rawDelete('''
-        DELETE FROM "RowData" WHERE id = $id
-      ''');
+      var response = await myDB.rawDelete(query);
       return response;
     } catch (e) {
       rethrow;

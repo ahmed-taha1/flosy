@@ -1,8 +1,10 @@
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:untitled1/main.dart';
+import 'package:untitled1/Model/ExpenseType.dart';
 import 'package:untitled1/View/WidgetDrawer.dart';
+
+import '../Model/PageName.dart';
 
 class HomeView extends StatelessWidget {
   final _controller = ScrollController();
@@ -38,8 +40,8 @@ class HomeView extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            WidgetDrawer.drawIncomeExpenseRec(true),
-                            WidgetDrawer.drawIncomeExpenseRec(false),
+                            WidgetDrawer.drawIncomeOrExpenseRectangle(ExpenseType.INCOME),
+                            WidgetDrawer.drawIncomeOrExpenseRectangle(ExpenseType.EXPENSE),
                           ],
                         ),
                       ),
@@ -68,10 +70,23 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 140, 111, 228),
-        onPressed: () => context.go(PageName.AddPage.path),
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: FloatingActionButton(
+              backgroundColor: const Color.fromARGB(255, 140, 111, 228),
+              onPressed: () => context.go(PageName.WishListPage.path),
+              child: const Icon(Icons.list),
+            ),
+          ),
+          FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 140, 111, 228),
+            onPressed: () => context.go(PageName.AddPage.path),
+            child: const Icon(Icons.add),
+          ),
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
       ),
     );
   }

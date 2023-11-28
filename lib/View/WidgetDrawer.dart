@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled1/Controller/ExpenseController.dart';
+import 'package:untitled1/Controller/WishController.dart';
 import 'package:untitled1/Model/Expense.dart';
-import 'package:untitled1/main.dart';
+import 'package:untitled1/Model/ExpenseType.dart';
+import 'package:untitled1/Model/Wish.dart';
+import '../Model/PageName.dart';
 
-import 'AddExpenseView.dart';
-
-class WidgetDrawer{
-  static Widget _drawPieChart(double height, int alpha, int width, bool backGround) {
-    int incomeAmount = ExpenseController.getIncomeAmount() ?? 1;
-    int expenseAmount = ExpenseController.getExpenseAmount() ?? 1;
+class WidgetDrawer {
+  static Widget _drawPieChart(
+      double height, int alpha, int width, bool backGround) {
+    int incomeAmount = ExpenseController.getAmount(ExpenseType.INCOME) ?? 1;
+    int expenseAmount = ExpenseController.getAmount(ExpenseType.EXPENSE) ?? 1;
 
     return SizedBox(
         height: height,
@@ -30,7 +32,7 @@ class WidgetDrawer{
             }
           },
           labelPosition:
-          backGround ? PieLabelPosition.inside : PieLabelPosition.outside,
+              backGround ? PieLabelPosition.inside : PieLabelPosition.outside,
           pieLabel: (Map<dynamic, dynamic> pieData, int? index) {
             return backGround ? ' ' : pieData['domain'];
           },
@@ -49,9 +51,9 @@ class WidgetDrawer{
     );
   }
 
-  static Widget drawIncomeExpenseRec(bool IsIncome) {
-    int income = ExpenseController.getIncomeAmount() ?? 1;
-    int expense = ExpenseController.getExpenseAmount() ?? 1;
+  static Widget drawIncomeOrExpenseRectangle(ExpenseType expenseType) {
+    int amount = ExpenseController.getAmount(expenseType) ?? 0;
+    // int expenseAmount = ExpenseController.getAmount(ExpenseType.EXPENSE) ?? 0;
 
     return Container(
       height: 70,
@@ -70,8 +72,12 @@ class WidgetDrawer{
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(15)),
               child: Icon(
-                IsIncome ? Icons.arrow_upward : Icons.arrow_downward,
-                color: IsIncome ? Colors.greenAccent : Colors.redAccent,
+                expenseType == ExpenseType.INCOME
+                    ? Icons.arrow_upward
+                    : Icons.arrow_downward,
+                color: expenseType == ExpenseType.INCOME
+                    ? Colors.greenAccent
+                    : Colors.redAccent,
                 size: 30,
               ),
             ),
@@ -82,15 +88,17 @@ class WidgetDrawer{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    IsIncome ? '+$income' : '-$expense',
+                    '$amount',
                     style: TextStyle(
-                      color: IsIncome ? Colors.greenAccent : Colors.redAccent,
+                      color: expenseType == ExpenseType.INCOME
+                          ? Colors.greenAccent
+                          : Colors.redAccent,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    IsIncome ? "income" : "Expense",
+                    expenseType.text,
                   )
                 ],
               ),
@@ -116,7 +124,7 @@ class WidgetDrawer{
                   onPressed: (ctx) {
                     try {
                       ExpenseController.removeExpenseAt(i);
-                    } catch(e){
+                    } catch (e) {
                       rethrow;
                     }
                     ctx.go(PageName.Home.path);
@@ -130,50 +138,43 @@ class WidgetDrawer{
             child: SizedBox(
               height: 60,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Icon(
+                    expenseBuffer[i].type == ExpenseType.INCOME
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
+                    color: expenseBuffer[i].type == ExpenseType.INCOME
+                        ? Colors.greenAccent
+                        : Colors.redAccent,
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        expenseBuffer[i].isIncome
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
-                        color: expenseBuffer[i].isIncome
-                            ? Colors.greenAccent
-                            : Colors.redAccent,
-                        size: 30,
+                      Container(
+                        width: 200,
+                        child: Text(
+                          expenseBuffer[i].description,
+                          style: const TextStyle(fontSize: 16),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            expenseBuffer[i].description == ""
-                                ? "${DateTime.now().month}/${DateTime.now().day}"
-                                : expenseBuffer[i].description,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            expenseBuffer[i].date.toString(),
-                            style: const TextStyle(
-                              color: Colors.black45,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        expenseBuffer[i].date.toString(),
+                        style: const TextStyle(
+                          color: Colors.black45,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      '\$${expenseBuffer[i].amount}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                  Text(
+                    '${expenseBuffer[i].amount}\$',
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -182,10 +183,54 @@ class WidgetDrawer{
         });
   }
 
+  static Widget drawWishList() {
+    List<Wish> wishBuffer = WishController.getBuffer();
+    return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: wishBuffer.length,
+        itemBuilder: (ctx, i) {
+          return Slidable(
+            endActionPane: ActionPane(
+              motion: const StretchMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (ctx) {
+                    try {
+                      WishController.removeExpenseAt(i);
+                    } catch (e) {
+                      rethrow;
+                    }
+                    ctx.go(PageName.WishListPage.path);
+                  },
+                  backgroundColor: Colors.red,
+                  label: 'Delete',
+                  icon: Icons.delete,
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 60,
+                  child: Text(
+                    wishBuffer[i].name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   static Widget drawTextField(TextInputType textInputType, String LabelText,
-      TextEditingController Controller) {
+      TextEditingController Controller, int maxLength) {
     return SizedBox(
-      height: 70,
+      height: 74,
       child: TextField(
         controller: Controller,
         decoration: InputDecoration(
@@ -211,33 +256,34 @@ class WidgetDrawer{
         ),
         style: const TextStyle(color: Colors.white),
         keyboardType: textInputType,
-        maxLength: LabelText == "amount" ? 10 : 30,
+        maxLength: maxLength,
       ),
     );
   }
 
-  static showSnackBar(BuildContext context, bool isSuccess) {
+  static showSnackBar(BuildContext context, ContentType contentType,
+      String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
-        title: isSuccess ? 'Success' : 'Failed!',
-        message:
-        isSuccess ? 'data has been added.' : 'invalid data please try again!',
-        contentType: isSuccess ? ContentType.success : ContentType.failure,
+        title: title,
+        message: message,
+        contentType: contentType,
       ),
     ));
   }
 
-  static Widget drawRadioBtn(int state, int stateController, Function(int) onRadioBtnChanged) {
+  static Widget drawRadioBtn(int state, int stateController, String text,
+      Function(int) onRadioBtnChanged) {
     return SizedBox(
       height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Radio(
-            value: state == AddExpenseView.INCOME_STATE ? 1 : 0,
+            value: state,
             groupValue: stateController,
             onChanged: (value) {
               onRadioBtnChanged(value!);
@@ -245,7 +291,7 @@ class WidgetDrawer{
             fillColor: MaterialStateColor.resolveWith((states) => Colors.white),
           ),
           Text(
-            state == AddExpenseView.INCOME_STATE ? "Income" : "Expense",
+            text,
             style: const TextStyle(color: Colors.white),
           ),
         ],

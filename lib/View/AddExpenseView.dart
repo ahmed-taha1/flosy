@@ -1,18 +1,22 @@
+import 'dart:ffi';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled1/Controller/ExpenseController.dart';
 import 'package:untitled1/main.dart';
 import 'package:untitled1/View/WidgetDrawer.dart';
 
-class AddExpenseView extends StatefulWidget {
-  static int EXPENSE_STATE = 0, INCOME_STATE = 1;
+import '../Model/ExpenseType.dart';
+import '../Model/PageName.dart';
 
+class AddExpenseView extends StatefulWidget {
   @override
   State<AddExpenseView> createState() => _AddExpenseViewState();
 }
 
 class _AddExpenseViewState extends State<AddExpenseView> {
-  int radioBtnState = AddExpenseView.INCOME_STATE;
+  int radioBtnState = ExpenseType.INCOME.index;
   TextEditingController descriptionField = TextEditingController(),
       amountField = TextEditingController();
 
@@ -63,7 +67,7 @@ class _AddExpenseViewState extends State<AddExpenseView> {
               height: 50,
             ),
             WidgetDrawer.drawTextField(
-                TextInputType.text, 'description', descriptionField),
+                TextInputType.text, 'description', descriptionField, 30),
             const SizedBox(
               height: 10,
             ),
@@ -72,14 +76,14 @@ class _AddExpenseViewState extends State<AddExpenseView> {
               children: [
                 Expanded(
                     child: WidgetDrawer.drawTextField(
-                        TextInputType.number, 'amount', amountField)),
+                        TextInputType.number, 'amount', amountField, 10)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    WidgetDrawer.drawRadioBtn(AddExpenseView.INCOME_STATE,
-                        radioBtnState, handleRadioBtnState),
-                    WidgetDrawer.drawRadioBtn(AddExpenseView.EXPENSE_STATE,
-                        radioBtnState, handleRadioBtnState),
+                    WidgetDrawer.drawRadioBtn(ExpenseType.INCOME.index,
+                        radioBtnState,ExpenseType.INCOME.text ,handleRadioBtnState),
+                    WidgetDrawer.drawRadioBtn(ExpenseType.EXPENSE.index,
+                        radioBtnState,ExpenseType.EXPENSE.text, handleRadioBtnState),
                   ],
                 ),
               ],
@@ -90,20 +94,20 @@ class _AddExpenseViewState extends State<AddExpenseView> {
             Container(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async{
                   FocusScope.of(context)
                       .requestFocus(FocusNode()); //hide keyboard
                   try {
-                    ExpenseController.addExpense(
-                        radioBtnState == 1 ? true : false,
-                        amountField.text,
+                    await ExpenseController.addExpense(
+                        ExpenseType.values[radioBtnState],
+                        descriptionField.text,
                         double.parse(amountField.text));
                     // clear text fields
                     amountField.clear();
                     descriptionField.clear();
-                    WidgetDrawer.showSnackBar(context, true);
+                    WidgetDrawer.showSnackBar(context, ContentType.success, "Success", "Data has been Added");
                   } catch (e) {
-                    WidgetDrawer.showSnackBar(context, false);
+                    WidgetDrawer.showSnackBar(context, ContentType.failure, "Failed", "Invalid Data");
                   }
                 },
                 style: ElevatedButton.styleFrom(
