@@ -209,16 +209,29 @@ class WidgetDrawer {
                 ),
               ],
             ),
-            child: Row(
+            child: Column(
               children: [
                 Container(
                   height: 60,
-                  child: Text(
-                    wishBuffer[i].name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        wishBuffer[i].name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Container(
+                    color: Colors.white54,
+                    width: double.infinity,
+                    height: 1,
                   ),
                 ),
               ],

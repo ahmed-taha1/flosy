@@ -42,7 +42,9 @@ class WishListView extends StatelessWidget {
             const Text(
               "Wish List",
               style: TextStyle(
-                  color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20,
@@ -56,23 +58,24 @@ class WishListView extends StatelessWidget {
                     child: WidgetDrawer.drawTextField(
                         TextInputType.text, "Name", nameField, 30)),
                 ElevatedButton(
-                  onPressed: () async{
-                      try {
-                        await WishController.addWish(nameField.text);
-                        context.go(PageName.WishListPage.path);
-                        WidgetDrawer.showSnackBar(context, ContentType.success, "Success", "Data has been added");
-                      }
-                      catch (e){
-                        WidgetDrawer.showSnackBar(context, ContentType.failure, "Failed", "Invalid operation");
-                      }
+                  onPressed: () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    try {
+                      await WishController.addWish(nameField.text);
+                      context.go(PageName.WishListPage.path);
+                      WidgetDrawer.showSnackBar(context, ContentType.success,
+                          "Success", "Data has been added");
+                    } catch (e) {
+                      WidgetDrawer.showSnackBar(context, ContentType.failure,
+                          "Failed", "Invalid operation");
+                    }
                   },
-                    child: Text(
-                      "Add",
-                      style: TextStyle(color: Color.fromARGB(255, 106, 140, 253)),
-                    ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white
+                  child: Text(
+                    "Add",
+                    style: TextStyle(color: Color.fromARGB(255, 106, 140, 253)),
                   ),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.white),
                 )
               ],
             ),

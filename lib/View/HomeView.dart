@@ -82,7 +82,7 @@ class HomeView extends StatelessWidget {
           ),
           FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 140, 111, 228),
-            onPressed: () => context.go(PageName.AddPage.path),
+            onPressed: () => context.push(PageName.AddPage.path),
             child: const Icon(Icons.add),
           ),
         ],
