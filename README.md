@@ -1,16 +1,20 @@
-# expenses_app
+# flosy
+Flosy is a meticulously crafted expense tracking application designed to empower users to effortlessly manage their daily expenses and incomes. Built on the principles of Model-View-Controller (MVC) architecture, Flosy ensures a seamless and organized user experience.
+## Key Features:
+* Expense Tracking: Effortlessly log your daily expenses and incomes to gain insights into your financial habits.
+* MVC Architecture: The application is developed using a Model-View-Controller architecture, enhancing code maintainability, scalability, and overall system organization.
+* Clean Code: Flosy's codebase is structured with cleanliness in mind, promoting readability and ease of collaboration for developers.
+* Architectural Integrity: The architecture of Flosy ensures a clear separation of concerns, making it adaptable to future enhancements and modifications.
+* Organized Design: With a focus on good design principles, Flosy offers a well-organized system that promotes a smooth user experience.
 
-A new Flutter project.
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/1.jpg)
 
-## Getting Started
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/2.jpg)
 
-This project is a starting point for a Flutter application.
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/3.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/4.jpg)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/5.jpg)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![](https://github.com/ahmed-taha1/flosy/blob/main/screenshots/6.jpg)
